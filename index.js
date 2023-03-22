@@ -1,7 +1,7 @@
 const express = require('express')
 const app = express()
 
-let notes = [
+let persons = [
     { 
       "id": 1,
       "name": "Arto Hellas", 
@@ -25,5 +25,10 @@ let notes = [
 ]
 
 app.get('/api/persons', (req, resp)=>{
-    resp.json(notes)
+    resp.json(persons)
+})
+
+const PORT = 3001
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`)
 })
