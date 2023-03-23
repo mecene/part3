@@ -8,7 +8,7 @@ morgan.token('body', req=>{
     return JSON.stringify(req.body)
 })
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'))
-//app.use(morgan.token('tiny', function (req, res) { return req.body['content-type'] }))
+//app.use(morgan.token('tiny')
 
 let persons = [
     {
