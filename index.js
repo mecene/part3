@@ -25,8 +25,8 @@ let persons = [
     }
 ]
 
-app.get("/info", (req, resp) => {
-    resp.send(
+app.get("/info", (req, res) => {
+    res.send(
         `<p>Phonebook has info for 
         ${persons.length} 
         ${persons.length > 1
@@ -37,29 +37,45 @@ app.get("/info", (req, resp) => {
     )
 })
 
-app.get("/api/persons", (req, resp) => {
-    resp.json(persons)
+app.get("/api/persons", (req, res) => {
+    res.json(persons)
 })
 
-app.get('/api/persons/:id', (req,resp)=>{
+app.get('/api/persons/:id', (req,res)=>{
     const person = persons.find(person => person.id === Number(req.params.id))
     person
-        ? resp.json(person)
-        : resp.status(404).end()
+        ? res.json(person)
+        : res.status(404).end()
 })
 
 app.delete('/api/persons/:id', (req,res)=>{
     const id = Number(req.params.id)
     persons = persons.filter(person => person.id !== id)
-    console.log(persons);
+    console.log(persons)
     res.status(204).end()
 })
 
 app.post('/api/persons', (req,res)=>{
+    const body = req.body
+    const nameExist = persons.find(person => person.name === body.name)
+
+    if(!body.name || !body.number){
+       return  res.status(400).json({
+        error: 'Name or number is missing'
+       })
+    }
+    
+    if(nameExist){
+        return res.status(400).json({
+            error : 'Name must be unique'
+        })
+    }
+
     const id = Math.floor(Math.random()*100000)
     const person = {"id": id, ...req.body}
     persons = persons.concat(person)
-    res.status(200).end()
+   
+     res.status(200).end()
     
 })
 
