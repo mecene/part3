@@ -24,10 +24,6 @@ let persons = [
     }
 ]
 
-app.get("/api/persons", (req, resp) => {
-    resp.json(persons)
-})
-
 app.get("/info", (req, resp) => {
     resp.send(
         `<p>Phonebook has info for 
@@ -40,6 +36,10 @@ app.get("/info", (req, resp) => {
     )
 })
 
+app.get("/api/persons", (req, resp) => {
+    resp.json(persons)
+})
+
 app.get('/api/persons/:id', (req,resp)=>{
     const person = persons.find(person => person.id === Number(req.params.id))
     person
@@ -47,6 +47,12 @@ app.get('/api/persons/:id', (req,resp)=>{
         : resp.status(404).end()
 })
 
+app.delete('/api/persons/:id', (req,res)=>{
+    const id = Number(req.params.id)
+    persons = persons.filter(person => person.id !== id)
+    console.log(persons);
+    res.status(204).end()
+})
 const PORT = 3001
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`)
