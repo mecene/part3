@@ -59,11 +59,8 @@ app.get('/api/persons/:id', (req,res)=>{
 })
 
 app.delete('/api/persons/:id', (req,res)=>{
-    console.log('we try to delete');
     const id = Number(req.params.id)
-    console.log('retrieve id');
     persons = persons.filter(person => person.id !== id)
-    console.log('rerender the var persons');
     res.status(204).end()
 })
 
