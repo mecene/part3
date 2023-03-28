@@ -25,6 +25,7 @@
   "homepage": "https://github.com/mecene/part3#readme",
   "dependencies": {
     "express": "^4.18.2",
+    "mongoose": "^7.0.3",
     "morgan": "^1.10.0"
   },
   "devDependencies": {
