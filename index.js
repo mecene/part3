@@ -3,11 +3,11 @@ const express = require('express')
 const morgan = require('morgan')
 const app = express()
 const Person = require('./models/person')
+const errorHandeler = require('./middleware/errorHandeler')
 
+app.use(express.static('build'))
 app.use(express.json())
 // morgan middleware log in console the request info
-app.use(express.static('build'))
-
 morgan.token('body', req => {
     return JSON.stringify(req.body)
 })
@@ -36,30 +36,24 @@ app.get("/api/persons", (req, res) => {
 })
 
 
-
-app.get('/api/persons/:id', (req, res) => {
+app.get('/api/persons/:id', (req, res, next) => {
     Person.findById(req.params.id)
         .then(person => {
-            res.json(person)
-
+            person
+                ?res.json(person)
+                :res.status(404).end()
         })
-        .catch((error) => {
-            console.log("error couldn't find this person", error.message)
-            res.status(404).end()
-        })
+        .catch(error => next(error))
 })
 
-app.delete('/api/persons/:id', (req, res) => {
+
+app.delete('/api/persons/:id', (req, res, next) => {
     Person.findByIdAndRemove({ id: req.params.id })
         .then(person => {
-            console.log(person.name, 'has been deleted')
+            //console.log(person.name, 'has been deleted')
             res.status(204).end()
-
         })
-        .catch((error) => {
-            console.log("An error happened when trying to delete person", error.message)
-            res.status(400).end()
-        })
+        .catch(error => next(error))
 })
 
 app.post('/api/persons', (req, res) => {
@@ -77,6 +71,7 @@ app.post('/api/persons', (req, res) => {
     res.status(200).end()
 })
 
+app.use(errorHandeler)
 
 const PORT = process.env.PORT
 app.listen(PORT, () => {
