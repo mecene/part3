@@ -77,11 +77,10 @@ app.post('/api/persons', (req, res) => {
     })
     person.save().then(result => {
         console.log("added to DB ", result.name)
-        res.status(200).end()
+        return res.status(200).end()
 
     })
-
-    res.status(200).end()
+    .catch(error => next(error))
 })
 
 app.use(errorHandeler)
