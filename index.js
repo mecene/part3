@@ -40,8 +40,8 @@ app.get('/api/persons/:id', (req, res, next) => {
     Person.findById(req.params.id)
         .then(person => {
             person
-                ?res.json(person)
-                :res.status(404).end()
+                ? res.json(person)
+                : res.status(404).end()
         })
         .catch(error => next(error))
 })
