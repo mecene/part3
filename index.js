@@ -4,6 +4,7 @@ const morgan = require('morgan')
 const app = express()
 const Person = require('./models/person')
 const errorHandeler = require('./middleware/errorHandeler')
+//const { findByIdAndUpdate } = require('./models/person')
 
 app.use(express.static('build'))
 app.use(express.json())
@@ -46,6 +47,18 @@ app.get('/api/persons/:id', (req, res, next) => {
         .catch(error => next(error))
 })
 
+app.put('/api/persons/:id', (req,res,next) => {
+    const body = req.body
+    const person = {
+        name: body.name,
+        number: body.number
+    }
+    Person.findByIdAndUpdate(req.params.id, person, { new: true })
+        .then(updatedPerson => {
+            res.json(updatedPerson)
+        })
+        .catch(error => next(error))
+})
 
 app.delete('/api/persons/:id', (req, res, next) => {
     Person.findByIdAndRemove({ id: req.params.id })
