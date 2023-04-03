@@ -48,10 +48,10 @@ app.get('/api/persons/:id', (req, res, next) => {
 })
 
 app.put('/api/persons/:id', (req,res,next) => {
-    const {name, number} = req.body
+    const { name, number } = req.body
     Person.findByIdAndUpdate(
-        req.params.id, 
-        {name, number}, 
+        req.params.id,
+        { name, number },
         { new: true ,runValidators: true, context: 'query' }
         )
         .then(updatedPerson => {
