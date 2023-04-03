@@ -4,7 +4,7 @@ const errorHandeler = (error, req, res, next) => {
         return res.status(400).send({errror : 'malformatted id'})
     }
     else if(error.name === 'ValidationError'){
-        return res.status(400).send({error: error.message})
+        return res.status(400).json({ error: error.message })
     }
     next(error)
 }

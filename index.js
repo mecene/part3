@@ -48,12 +48,12 @@ app.get('/api/persons/:id', (req, res, next) => {
 })
 
 app.put('/api/persons/:id', (req,res,next) => {
-    const body = req.body
-    const person = {
-        name: body.name,
-        number: body.number
-    }
-    Person.findByIdAndUpdate(req.params.id, person, { new: true })
+    const {name, number} = req.body
+    Person.findByIdAndUpdate(
+        req.params.id, 
+        {name, number}, 
+        { new: true ,runValidators: true, context: 'query' }
+        )
         .then(updatedPerson => {
             res.json(updatedPerson)
         })
@@ -61,9 +61,9 @@ app.put('/api/persons/:id', (req,res,next) => {
 })
 
 app.delete('/api/persons/:id', (req, res, next) => {
-    Person.findByIdAndRemove({ id: req.params.id })
+    Person.findByIdAndRemove(req.params.id)
         .then(person => {
-            //console.log(person.name, 'has been deleted')
+            console.log(person.name, 'has been deleted')
             res.status(204).end()
         })
         .catch(error => next(error))
